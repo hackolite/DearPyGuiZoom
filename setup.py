@@ -21,15 +21,15 @@ DEFAULT_PARALLEL_JOBS = 2
 
 def get_parallel_jobs():
     """Get a safe number of parallel jobs for building.
-    
-    Limits to MAX_PARALLEL_JOBS to prevent excessive memory consumption
-    and potential system freezes during wheel builds.
+
+    Returns a value limited to MAX_PARALLEL_JOBS to prevent excessive memory
+    consumption and potential system freezes during wheel builds.
     """
     try:
         # Limit to MAX_PARALLEL_JOBS to prevent memory issues on high-core systems
         num_cpus = multiprocessing.cpu_count()
         return min(num_cpus, MAX_PARALLEL_JOBS)
-    except (ImportError, NotImplementedError):
+    except NotImplementedError:
         # Default when cpu_count is not available
         return DEFAULT_PARALLEL_JOBS
 
