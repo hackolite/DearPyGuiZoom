@@ -8,8 +8,34 @@ import textwrap
 import sys
 import shutil
 import subprocess
+import multiprocessing
 
 wip_version = "2.1.1"
+
+# Maximum number of parallel jobs for building to prevent excessive memory consumption
+# Limiting parallel jobs prevents the build from consuming all available memory
+MAX_PARALLEL_JOBS = 4
+
+# Default number of parallel jobs when CPU count cannot be determined
+DEFAULT_PARALLEL_JOBS = 2
+
+def get_parallel_jobs():
+    """Get a safe number of parallel jobs for building.
+
+    Returns a value limited to MAX_PARALLEL_JOBS to prevent excessive memory
+    consumption and potential system freezes during wheel builds.
+
+    Returns:
+        int: Number of parallel jobs to use, between DEFAULT_PARALLEL_JOBS
+             and MAX_PARALLEL_JOBS.
+    """
+    try:
+        # Limit to MAX_PARALLEL_JOBS to prevent memory issues on high-core systems
+        num_cpus = multiprocessing.cpu_count()
+        return min(num_cpus, MAX_PARALLEL_JOBS)
+    except NotImplementedError:
+        # Default when cpu_count is not available
+        return DEFAULT_PARALLEL_JOBS
 
 def version_number():
     """This function reads the version number which is populated by github actions"""
@@ -114,20 +140,22 @@ class DPGBuildCommand(distutils.cmd.Command):
         shutil.copy("cmake-build-local/DearPyGui/Release/_dearpygui.pyd", src_path +"/output/dearpygui")
 
     elif get_platform() == "Linux":
+        parallel_jobs = get_parallel_jobs()
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
-        command.append("cd ..; cmake --build cmake-build-local --config Release -j")
+        command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for Linux",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
         src_path = os.path.dirname(os.path.abspath(__file__))
         shutil.copy("cmake-build-local/DearPyGui/_dearpygui.so", src_path +"/output/dearpygui")
     
     elif get_platform() == "OS X":
+        parallel_jobs = get_parallel_jobs()
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
-        command.append("cd ..; cmake --build cmake-build-local --config Release -j")
+        command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for OS X",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
         src_path = os.path.dirname(os.path.abspath(__file__))
