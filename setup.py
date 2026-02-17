@@ -16,6 +16,9 @@ wip_version = "2.1.1"
 # Limiting parallel jobs prevents the build from consuming all available memory
 MAX_PARALLEL_JOBS = 4
 
+# Default number of parallel jobs when CPU count cannot be determined
+DEFAULT_PARALLEL_JOBS = 2
+
 def get_parallel_jobs():
     """Get a safe number of parallel jobs for building.
     
@@ -30,8 +33,8 @@ def get_parallel_jobs():
         num_cpus = multiprocessing.cpu_count()
         return min(num_cpus, MAX_PARALLEL_JOBS)
     except (ImportError, NotImplementedError):
-        # Default to 2 if cpu_count is not available
-        return 2
+        # Default when cpu_count is not available
+        return DEFAULT_PARALLEL_JOBS
 
 def version_number():
     """This function reads the version number which is populated by github actions"""
