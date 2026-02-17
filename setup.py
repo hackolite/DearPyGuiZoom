@@ -24,7 +24,7 @@ def get_parallel_jobs():
 
     Returns a value limited to MAX_PARALLEL_JOBS to prevent excessive memory
     consumption and potential system freezes during wheel builds.
-    
+
     Returns:
         int: Number of parallel jobs to use, between DEFAULT_PARALLEL_JOBS
              and MAX_PARALLEL_JOBS.
