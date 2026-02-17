@@ -407,13 +407,15 @@ static const mvGuiStyleVarInfo* GetStyleVarInfo(ImGuiStyleVar idx)
 
 static const mvGuiStyleVarInfo GPlotStyleVarInfo[] =
 {
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, LineWeight)         }, // ImPlotStyleVar_LineWeight
-	{ ImGuiDataType_S32,   1, (ImU32)offsetof(ImPlotStyle, Marker)             }, // ImPlotStyleVar_Marker
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, MarkerSize)         }, // ImPlotStyleVar_MarkerSize
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, MarkerWeight)       }, // ImPlotStyleVar_MarkerWeight
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, FillAlpha)          }, // ImPlotStyleVar_FillAlpha
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, ErrorBarSize)       }, // ImPlotStyleVar_ErrorBarSize
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, ErrorBarWeight)     }, // ImPlotStyleVar_ErrorBarWeight
+	// Note: The following ImPlot item styling variables have been moved to ImPlotProp in newer ImPlot versions
+	// Using PlotDefaultSize as a dummy placeholder to maintain enum index compatibility
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_LineWeight (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_Marker (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_MarkerSize (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_MarkerWeight (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_FillAlpha (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_ErrorBarSize (OBSOLETE - use ImPlotProp)
+	{ ImGuiDataType_Float, 2, (ImU32)offsetof(ImPlotStyle, PlotDefaultSize)   }, // ImPlotStyleVar_ErrorBarWeight (OBSOLETE - use ImPlotProp)
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalPadding)     }, // ImPlotStyleVar_DigitalPadding
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalSpacing)     }, // ImPlotStyleVar_DigitalSpacing
 
