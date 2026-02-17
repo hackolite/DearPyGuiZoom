@@ -133,10 +133,18 @@ void mvMetricsWindow::drawWidgets()
                 ImPlot::PlotShaded("Low FPS", fps_x, fps_30, 2, INFINITY);
                 // ImPlot::PopStyleColor();
 
-                if (!buffers["Frame"].Data.empty())
-                    ImPlot::PlotLine("Frame", &buffers["Frame"].Data[0].x, &buffers["Frame"].Data[0].y, buffers["Frame"].Data.size(), ImPlotLineFlags_None, buffers["Frame"].Offset, 2 * sizeof(float));
-                if (!buffers["Presentation"].Data.empty())
-                    ImPlot::PlotLine("Presentation", &buffers["Presentation"].Data[0].x, &buffers["Presentation"].Data[0].y, buffers["Presentation"].Data.size(), ImPlotLineFlags_None, buffers["Presentation"].Offset, 2 * sizeof(float));
+                if (!buffers["Frame"].Data.empty()) {
+                    ImPlotSpec spec;
+                    spec.Offset = buffers["Frame"].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine("Frame", &buffers["Frame"].Data[0].x, &buffers["Frame"].Data[0].y, buffers["Frame"].Data.size(), spec);
+                }
+                if (!buffers["Presentation"].Data.empty()) {
+                    ImPlotSpec spec;
+                    spec.Offset = buffers["Presentation"].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine("Presentation", &buffers["Presentation"].Data[0].x, &buffers["Presentation"].Data[0].y, buffers["Presentation"].Data.size(), spec);
+                }
                 ImPlot::EndPlot();
             }
             ImPlot::PopStyleColor(3);
@@ -153,7 +161,10 @@ void mvMetricsWindow::drawWidgets()
                 {
                     if (item.first == "Frame" || item.first == "Presentation")
                         continue;
-                    ImPlot::PlotLine(item.first.c_str(), &buffers[item.first].Data[0].x, &buffers[item.first].Data[0].y, buffers[item.first].Data.size(), ImPlotLineFlags_None, buffers[item.first].Offset, 2 * sizeof(float));
+                    ImPlotSpec spec;
+                    spec.Offset = buffers[item.first].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine(item.first.c_str(), &buffers[item.first].Data[0].x, &buffers[item.first].Data[0].y, buffers[item.first].Data.size(), spec);
                 }
                 ImPlot::EndPlot();
             }
