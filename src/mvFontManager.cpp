@@ -40,8 +40,11 @@ NodeFont(ImFont* font)
 {
 ImGuiIO& io = ImGui::GetIO();
 ImGuiStyle& style = ImGui::GetStyle();
-bool font_details_opened = ImGui::TreeNode(font, "Font: \"%s\"\n%.2f px, %d glyphs, %d file(s)",
-	font->ConfigData ? font->ConfigData[0].Name : "", font->FontSize, font->Glyphs.Size, font->ConfigDataCount);
+
+// Note: ImFont structure has changed in newer ImGui versions
+// Many fields have been moved to ImFontBaked
+const char* fontName = (font->Sources.Size > 0 && font->Sources[0]) ? font->Sources[0]->Name : "Unknown";
+bool font_details_opened = ImGui::TreeNode(font, "Font: \"%s\"\n%.2f px", fontName, font->LegacySize);
 ImGui::SameLine(); if (ImGui::SmallButton("Set as default")) { io.FontDefault = font; }
 if (!font_details_opened)
 	return;
@@ -56,18 +59,24 @@ ImGui::SameLine(); HelpMarker(
 	"You may oversample them to get some flexibility with scaling. "
 	"You can also render at multiple sizes and select which one to use at runtime.\n\n"
 	"(Glimmer of hope: the atlas system will be rewritten in the future to make scaling more flexible.)");
-//ImGui::InputFloat("Font offset", &font->GlyphOffset.y, 1, 1, "%.0f");
-//ImGui::InputInt("Font offset", &font->ConfigData->GlyphOffset.y, 1, 1, "%.0f");
-ImGui::Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);
+
+// Note: Font metrics have been moved to ImFontBaked in newer versions
+// Commented out for compatibility
+// ImGui::Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);
 ImGui::Text("Fallback character: '%c' (U+%04X)", font->FallbackChar, font->FallbackChar);
 ImGui::Text("Ellipsis character: '%c' (U+%04X)", font->EllipsisChar, font->EllipsisChar);
-const int surface_sqrt = (int)sqrtf((float)font->MetricsTotalSurface);
-ImGui::Text("Texture Area: about %d px ~%dx%d px", font->MetricsTotalSurface, surface_sqrt, surface_sqrt);
-for (int config_i = 0; config_i < font->ConfigDataCount; config_i++)
-	if (font->ConfigData)
-		if (const ImFontConfig* cfg = &font->ConfigData[config_i])
-			ImGui::BulletText("Input %d: \'%s\', Oversample: (%d,%d), PixelSnapH: %d",
-				config_i, cfg->Name, cfg->OversampleH, cfg->OversampleV, cfg->PixelSnapH);
+// const int surface_sqrt = (int)sqrtf((float)font->MetricsTotalSurface);
+// ImGui::Text("Texture Area: about %d px ~%dx%d px", font->MetricsTotalSurface, surface_sqrt, surface_sqrt);
+
+// Note: Font sources information has been restructured
+for (int config_i = 0; config_i < font->Sources.Size; config_i++)
+	if (font->Sources[config_i])
+		ImGui::BulletText("Input %d: \'%s\', Oversample: (%d,%d), PixelSnapH: %d",
+			config_i, font->Sources[config_i]->Name, font->Sources[config_i]->OversampleH, font->Sources[config_i]->OversampleV, font->Sources[config_i]->PixelSnapH);
+
+// Note: Glyph display has been simplified for compatibility
+// Original glyph tree view code has been commented out due to API changes
+/*
 if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
 {
 	// Display all glyphs of the fonts in separate pages of 256 characters
@@ -91,7 +100,7 @@ if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
 			continue;
 		if (!ImGui::TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
 			continue;
-		float cell_size = font->FontSize * 1;
+		float cell_size = font->LegacySize * 1;
 		float cell_spacing = style.ItemSpacing.y;
 		ImVec2 base_pos = ImGui::GetCursorScreenPos();
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -123,6 +132,7 @@ if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
 	}
 	ImGui::TreePop();
 }
+*/
 ImGui::TreePop();
 }
 
@@ -198,11 +208,11 @@ mvFontManager::drawWidgets()
 		NodeFont(font);
 		ImGui::PopID();
 	}
-	if (ImGui::TreeNode("Atlas texture", "Atlas texture (%dx%d pixels)", atlas->TexWidth, atlas->TexHeight))
+	if (ImGui::TreeNode("Atlas texture", "Atlas texture (%dx%d pixels)", atlas->TexData ? atlas->TexData->Width : 0, atlas->TexData ? atlas->TexData->Height : 0))
 	{
 		ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 		ImVec4 border_col = ImVec4(1.0f, 1.0f, 1.0f, 0.5f);
-		ImGui::Image(atlas->TexID, ImVec2((float)atlas->TexWidth, (float)atlas->TexHeight), ImVec2(0, 0), ImVec2(1, 1), tint_col, border_col);
+		ImGui::Image(atlas->TexID.GetTexID(), ImVec2((float)atlas->TexData ? atlas->TexData->Width : 0, (float)atlas->TexData ? atlas->TexData->Height : 0), ImVec2(0, 0), ImVec2(1, 1), tint_col, border_col);
 		ImGui::TreePop();
 	}
 

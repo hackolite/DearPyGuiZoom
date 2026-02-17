@@ -30,7 +30,7 @@ void mvTextureRegistry::show_debugger()
 
 		ImGui::Text("Textures");
 
-		ImGui::BeginChild("##TextureStorageChild", ImVec2(400, 0), ImGuiChildFlags_Border, ImGuiWindowFlags_AlwaysVerticalScrollbar);
+		ImGui::BeginChild("##TextureStorageChild", ImVec2(400, 0), ImGuiChildFlags_Borders, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 
 		int index = 0;
 		for (auto& texture : childslots[1])
@@ -303,9 +303,9 @@ void mvStaticTexture::draw(ImDrawList* drawlist, float x, float y)
 
 	if (uuid == MV_ATLAS_UUID)
 	{
-		_texture = ImGui::GetIO().Fonts->TexID;
-		config.width = ImGui::GetIO().Fonts->TexWidth;
-		config.height = ImGui::GetIO().Fonts->TexHeight;
+		_texture = ImGui::GetIO().Fonts->TexID.GetTexID();
+		config.width = ImGui::GetIO().Fonts->TexData ? ImGui::GetIO().Fonts->TexData->Width : 0;
+		config.height = ImGui::GetIO().Fonts->TexData ? ImGui::GetIO().Fonts->TexData->Height : 0;
 	}
 	else
 		_texture = LoadTextureFromArray(_permWidth, _permHeight, _value->data());

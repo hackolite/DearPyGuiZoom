@@ -350,7 +350,7 @@ void ImDrawListGrowChannels(ImDrawList* draw_list, const int num_channels)
         {
             ImDrawCmd draw_cmd;
             draw_cmd.ClipRect = draw_list->_ClipRectStack.back();
-            draw_cmd.TextureId = draw_list->_TextureIdStack.back();
+            draw_cmd.TexRef = draw_list->_TextureStack.back();
             channel._CmdBuffer.push_back(draw_cmd);
         }
     }
@@ -2298,8 +2298,8 @@ void BeginNodeEditor()
         memcpy(
             (void*)&GImNodes->NodeEditorImgCtx->IO,
             (void*)&GImNodes->OriginalImgCtx->IO,
-            offsetof(ImGuiIO, PlatformSetImeDataFn) +
-                sizeof(GImNodes->OriginalImgCtx->IO.PlatformSetImeDataFn));
+            offsetof(ImGuiIO, BackendRendererUserData) +
+                sizeof(GImNodes->OriginalImgCtx->IO.BackendRendererUserData));
 
         GImNodes->NodeEditorImgCtx->IO.BackendPlatformUserData = nullptr;
         GImNodes->NodeEditorImgCtx->IO.BackendRendererUserData = nullptr;

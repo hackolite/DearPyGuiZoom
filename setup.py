@@ -43,6 +43,38 @@ def get_platform():
     
     return platforms[sys.platform]
 
+def init_submodules():
+    """Initialize git submodules if they are not already initialized"""
+    
+    # Check if .git directory exists (this is a git repo)
+    if not os.path.isdir('.git'):
+        print("Warning: Not a git repository. Submodules cannot be initialized.")
+        print("Please clone the repository with: git clone --recursive https://github.com/hackolite/DearPyGuiZoom")
+        return False
+    
+    # Check if submodules are already initialized
+    submodule_dirs = ['thirdparty/glfw', 'thirdparty/imgui', 'thirdparty/implot', 'thirdparty/cpython', 'thirdparty/freetype']
+    all_initialized = True
+    
+    for submodule_dir in submodule_dirs:
+        # Check if the submodule directory exists and is not empty
+        if not os.path.isdir(submodule_dir) or not os.listdir(submodule_dir):
+            all_initialized = False
+            break
+    
+    if not all_initialized:
+        print("Initializing git submodules...")
+        try:
+            subprocess.check_call(['git', 'submodule', 'update', '--init', '--recursive'])
+            print("Git submodules initialized successfully.")
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"Error initializing submodules: {e}")
+            print("Please run: git submodule update --init --recursive")
+            return False
+    
+    return True
+
 class BinaryDistribution(Distribution):
     def has_ext_modules(var):
         return True
@@ -63,6 +95,10 @@ class DPGBuildCommand(distutils.cmd.Command):
     if os.environ.get('READTHEDOCS') == 'True':
         self.announce('Using readthedocs hack',level=distutils.log.INFO)
         return
+
+    # Initialize git submodules if needed
+    if not init_submodules():
+        self.announce('Failed to initialize git submodules. Build may fail.',level=distutils.log.WARN)
 
     if get_platform() == "Windows":
         command = [r'set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";"C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";"C:\Program Files (x86)\Microsoft Visual Studio\2022\Professional\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH% && ']

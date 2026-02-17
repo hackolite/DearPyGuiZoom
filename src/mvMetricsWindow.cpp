@@ -119,22 +119,32 @@ void mvMetricsWindow::drawWidgets()
                 static float fps_60[2] = { 16000.0f, 16000.0f };
                 static float fps_30[2] = { 32000.0f, 32000.0f };
 
-                ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(0.0f, 1.0f, 0.0f, 0.1f));
+                // Note: ImPlotCol_Fill has been removed in newer ImPlot versions
+                // Colors are now set via ImPlotSpec in plotting functions
+                // ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(0.0f, 1.0f, 0.0f, 0.1f));
                 ImPlot::PlotShaded("60+ FPS", fps_x, fps_h, fps_60, 2);
-                ImPlot::PopStyleColor();
+                // ImPlot::PopStyleColor();
 
-                ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(1.0f, 1.0f, 0.0f, 0.1f));
+                // ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(1.0f, 1.0f, 0.0f, 0.1f));
                 ImPlot::PlotShaded("30+ FPS", fps_x, fps_60, fps_30, 2);
-                ImPlot::PopStyleColor();
+                // ImPlot::PopStyleColor();
 
-                ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(1.0f, 0.0f, 0.0f, 0.1f));
+                // ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(1.0f, 0.0f, 0.0f, 0.1f));
                 ImPlot::PlotShaded("Low FPS", fps_x, fps_30, 2, INFINITY);
-                ImPlot::PopStyleColor();
+                // ImPlot::PopStyleColor();
 
-                if (!buffers["Frame"].Data.empty())
-                    ImPlot::PlotLine("Frame", &buffers["Frame"].Data[0].x, &buffers["Frame"].Data[0].y, buffers["Frame"].Data.size(), ImPlotLineFlags_None, buffers["Frame"].Offset, 2 * sizeof(float));
-                if (!buffers["Presentation"].Data.empty())
-                    ImPlot::PlotLine("Presentation", &buffers["Presentation"].Data[0].x, &buffers["Presentation"].Data[0].y, buffers["Presentation"].Data.size(), ImPlotLineFlags_None, buffers["Presentation"].Offset, 2 * sizeof(float));
+                if (!buffers["Frame"].Data.empty()) {
+                    ImPlotSpec spec;
+                    spec.Offset = buffers["Frame"].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine("Frame", &buffers["Frame"].Data[0].x, &buffers["Frame"].Data[0].y, buffers["Frame"].Data.size(), spec);
+                }
+                if (!buffers["Presentation"].Data.empty()) {
+                    ImPlotSpec spec;
+                    spec.Offset = buffers["Presentation"].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine("Presentation", &buffers["Presentation"].Data[0].x, &buffers["Presentation"].Data[0].y, buffers["Presentation"].Data.size(), spec);
+                }
                 ImPlot::EndPlot();
             }
             ImPlot::PopStyleColor(3);
@@ -151,7 +161,10 @@ void mvMetricsWindow::drawWidgets()
                 {
                     if (item.first == "Frame" || item.first == "Presentation")
                         continue;
-                    ImPlot::PlotLine(item.first.c_str(), &buffers[item.first].Data[0].x, &buffers[item.first].Data[0].y, buffers[item.first].Data.size(), ImPlotLineFlags_None, buffers[item.first].Offset, 2 * sizeof(float));
+                    ImPlotSpec spec;
+                    spec.Offset = buffers[item.first].Offset;
+                    spec.Stride = 2 * sizeof(float);
+                    ImPlot::PlotLine(item.first.c_str(), &buffers[item.first].Data[0].x, &buffers[item.first].Data[0].y, buffers[item.first].Data.size(), spec);
                 }
                 ImPlot::EndPlot();
             }
