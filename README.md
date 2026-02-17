@@ -74,11 +74,49 @@
   
 ## Installation
 
+### Prerequisites
+
 Ensure you have at least Python 3.8 64bit.
+
+### For Linux Users
+
+This package requires compilation from source. You need to install the following system dependencies first:
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install -y git cmake build-essential libwayland-dev wayland-protocols libxkbcommon-dev xorg-dev
+```
+
+**Fedora/RHEL:**
+```bash
+sudo dnf install git cmake gcc-c++ wayland-devel wayland-protocols-devel libxkbcommon-devel libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel
+```
+
+### Installation from Source
+
+Clone the repository with submodules:
+```bash
+git clone --recursive https://github.com/hackolite/DearPyGuiZoom
+cd DearPyGuiZoom
+pip install .
+```
+
+If you already cloned the repository without `--recursive`, initialize the submodules:
+```bash
+git submodule update --init --recursive
+pip install .
+```
+
+### Installation from PyPI
+
+**Note:** Direct pip installation is not recommended for Linux as it requires source compilation with system dependencies. Please use the "Installation from Source" method above.
+
+For Windows and macOS with pre-built wheels (if available):
  ```
- pip install dearpygui
+ pip install dearpygui-nodezoomfork
  or
- pip3 install dearpygui
+ pip3 install dearpygui-nodezoomfork
  ```
  
 ## How to use?
