@@ -24,6 +24,10 @@ def get_parallel_jobs():
 
     Returns a value limited to MAX_PARALLEL_JOBS to prevent excessive memory
     consumption and potential system freezes during wheel builds.
+    
+    Returns:
+        int: Number of parallel jobs to use, between DEFAULT_PARALLEL_JOBS
+             and MAX_PARALLEL_JOBS.
     """
     try:
         # Limit to MAX_PARALLEL_JOBS to prevent memory issues on high-core systems
@@ -140,7 +144,7 @@ class DPGBuildCommand(distutils.cmd.Command):
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
-        command.append("cd ..; cmake --build cmake-build-local --config Release -j" + str(parallel_jobs))
+        command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for Linux",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
         src_path = os.path.dirname(os.path.abspath(__file__))
@@ -151,7 +155,7 @@ class DPGBuildCommand(distutils.cmd.Command):
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
-        command.append("cd ..; cmake --build cmake-build-local --config Release -j" + str(parallel_jobs))
+        command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for OS X",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
         src_path = os.path.dirname(os.path.abspath(__file__))
