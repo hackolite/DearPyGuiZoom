@@ -27,8 +27,8 @@ def get_parallel_jobs():
         # Limit to MAX_PARALLEL_JOBS maximum to prevent memory issues
         # Even on systems with many cores, limiting parallel jobs
         # prevents excessive memory usage during compilation
-        cpu_count = multiprocessing.cpu_count()
-        return min(cpu_count, MAX_PARALLEL_JOBS)
+        num_cpus = multiprocessing.cpu_count()
+        return min(num_cpus, MAX_PARALLEL_JOBS)
     except (ImportError, NotImplementedError):
         # Default to 2 if cpu_count is not available
         return 2
