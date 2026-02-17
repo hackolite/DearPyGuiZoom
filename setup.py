@@ -8,23 +8,27 @@ import textwrap
 import sys
 import shutil
 import subprocess
+import multiprocessing
 
 wip_version = "2.1.1"
+
+# Maximum number of parallel jobs for building to prevent excessive memory consumption
+# Limiting parallel jobs prevents the build from consuming all available memory
+MAX_PARALLEL_JOBS = 4
 
 def get_parallel_jobs():
     """Get a safe number of parallel jobs for building.
     
-    Limits to 4 jobs to prevent excessive memory consumption during wheel builds.
+    Limits to MAX_PARALLEL_JOBS to prevent excessive memory consumption during wheel builds.
     This prevents the build from consuming all available memory and potentially
     freezing the system.
     """
     try:
-        import multiprocessing
-        # Limit to 4 jobs maximum to prevent memory issues
+        # Limit to MAX_PARALLEL_JOBS maximum to prevent memory issues
         # Even on systems with many cores, limiting parallel jobs
         # prevents excessive memory usage during compilation
         cpu_count = multiprocessing.cpu_count()
-        return min(cpu_count, 4)
+        return min(cpu_count, MAX_PARALLEL_JOBS)
     except (ImportError, NotImplementedError):
         # Default to 2 if cpu_count is not available
         return 2
