@@ -71,7 +71,7 @@ DearPyGui::fill_configuration_dict(const mvChildWindowConfig& inConfig, PyObject
     checkbitset("flattened_navigation", ImGuiWindowFlags_NavFlattened, inConfig.windowflags);
 
     // child flags
-    checkbitset("border", ImGuiChildFlags_Border, inConfig.childFlags);
+    checkbitset("border", ImGuiChildFlags_Borders, inConfig.childFlags);
     checkbitset("always_auto_resize", ImGuiChildFlags_AlwaysAutoResize, inConfig.childFlags);
     checkbitset("always_use_window_padding", ImGuiChildFlags_AlwaysUseWindowPadding, inConfig.childFlags);
     checkbitset("auto_resize_x", ImGuiChildFlags_AutoResizeX, inConfig.childFlags);
@@ -291,7 +291,7 @@ DearPyGui::set_configuration(PyObject* inDict, mvChildWindowConfig& outConfig)
     flagop("flattened_navigation", ImGuiWindowFlags_NavFlattened, outConfig.windowflags);
 
     // child flags
-    flagop("border", ImGuiChildFlags_Border, outConfig.childFlags);
+    flagop("border", ImGuiChildFlags_Borders, outConfig.childFlags);
     flagop("always_auto_resize", ImGuiChildFlags_AlwaysAutoResize, outConfig.childFlags);
     flagop("always_use_window_padding", ImGuiChildFlags_AlwaysUseWindowPadding, outConfig.childFlags);
     flagop("auto_resize_x", ImGuiChildFlags_AutoResizeX, outConfig.childFlags);

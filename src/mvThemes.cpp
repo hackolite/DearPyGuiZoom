@@ -414,8 +414,8 @@ static const mvGuiStyleVarInfo GPlotStyleVarInfo[] =
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, FillAlpha)          }, // ImPlotStyleVar_FillAlpha
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, ErrorBarSize)       }, // ImPlotStyleVar_ErrorBarSize
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, ErrorBarWeight)     }, // ImPlotStyleVar_ErrorBarWeight
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalBitHeight)   }, // ImPlotStyleVar_DigitalBitHeight
-	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalBitGap)      }, // ImPlotStyleVar_DigitalBitGap
+	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalPadding)     }, // ImPlotStyleVar_DigitalPadding
+	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, DigitalSpacing)     }, // ImPlotStyleVar_DigitalSpacing
 
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, PlotBorderSize)     }, // ImPlotStyleVar_PlotBorderSize
 	{ ImGuiDataType_Float, 1, (ImU32)offsetof(ImPlotStyle, MinorAlpha)         }, // ImPlotStyleVar_MinorAlpha

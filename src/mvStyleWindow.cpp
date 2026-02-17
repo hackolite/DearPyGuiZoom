@@ -105,8 +105,9 @@ void mvStyleWindow::drawWidgets()
             ImGui::Checkbox("AntiAliasedLines", &style.AntiAliasedLines);
             ImGui::Checkbox("AntiAliasedLinesUseTex", &style.AntiAliasedLinesUseTex);
             ImGui::Checkbox("AntiAliasedFill", &style.AntiAliasedFill);
-            ImGui::Text("Docking");
-            ImGui::SliderFloat("DockingSplitterSize", &style.DockingSeparatorSize, 0.0f, 12.0f, "%.0f");
+            // Note: DockingSeparatorSize removed in newer ImGui versions
+            // ImGui::Text("Docking");
+            // ImGui::SliderFloat("DockingSplitterSize", &style.DockingSeparatorSize, 0.0f, 12.0f, "%.0f");
             ImGui::Text("Alignment");
             ImGui::SliderFloat2("mvStyleVar_WindowTitleAlign", (float*)&style.WindowTitleAlign, 0.0f, 1.0f, "%.2f");
             ImGui::SliderFloat2("mvStyleVar_TableAngledHeadersTextAlign", (float*)&style.TableAngledHeadersTextAlign, 0.0f, 1.0f, "%.2f");
@@ -122,15 +123,19 @@ void mvStyleWindow::drawWidgets()
             ImGui::SameLine(); HelpMarker("Adjust if you cannot see the edges of your screen (e.g. on a TV where scaling has not been configured).");
             ImGui::SliderFloat2("mvStyleVar_DisplaySafeAreaPadding", (float*)&style.DisplaySafeAreaPadding, 0.0f, 30.0f, "%.0f");
                 
-            ImGui::Text("Item Styling");
-            ImGui::SliderFloat("LineWeight", &plotstyle.LineWeight, 0.0f, 5.0f, "%.1f");
-            ImGui::SliderFloat("MarkerSize", &plotstyle.MarkerSize, 2.0f, 10.0f, "%.1f");
-            ImGui::SliderFloat("MarkerWeight", &plotstyle.MarkerWeight, 0.0f, 5.0f, "%.1f");
-            ImGui::SliderFloat("FillAlpha", &plotstyle.FillAlpha, 0.0f, 1.0f, "%.2f");
-            ImGui::SliderFloat("ErrorBarSize", &plotstyle.ErrorBarSize, 0.0f, 10.0f, "%.1f");
-            ImGui::SliderFloat("ErrorBarWeight", &plotstyle.ErrorBarWeight, 0.0f, 5.0f, "%.1f");
-            ImGui::SliderFloat("DigitalBitHeight", &plotstyle.DigitalBitHeight, 0.0f, 20.0f, "%.1f");
-            ImGui::SliderFloat("DigitalBitGap", &plotstyle.DigitalBitGap, 0.0f, 20.0f, "%.1f");
+            // Note: The following style properties have been moved to ImPlotSpec in newer ImPlot versions
+            // and are no longer part of ImPlotStyle. Commenting them out for compatibility.
+            // ImGui::Text("Item Styling");
+            // ImGui::SliderFloat("LineWeight", &plotstyle.LineWeight, 0.0f, 5.0f, "%.1f");
+            // ImGui::SliderFloat("MarkerSize", &plotstyle.MarkerSize, 2.0f, 10.0f, "%.1f");
+            // ImGui::SliderFloat("MarkerWeight", &plotstyle.MarkerWeight, 0.0f, 5.0f, "%.1f");
+            // ImGui::SliderFloat("FillAlpha", &plotstyle.FillAlpha, 0.0f, 1.0f, "%.2f");
+            // ImGui::SliderFloat("ErrorBarSize", &plotstyle.ErrorBarSize, 0.0f, 10.0f, "%.1f");
+            // ImGui::SliderFloat("ErrorBarWeight", &plotstyle.ErrorBarWeight, 0.0f, 5.0f, "%.1f");
+            
+            ImGui::Text("Digital Plot Styling");
+            ImGui::SliderFloat("DigitalPadding", &plotstyle.DigitalPadding, 0.0f, 20.0f, "%.1f");
+            ImGui::SliderFloat("DigitalSpacing", &plotstyle.DigitalSpacing, 0.0f, 20.0f, "%.1f");
             float indent = ImGui::CalcItemWidth() - ImGui::GetFrameHeight();
             ImGui::Indent(ImGui::CalcItemWidth() - ImGui::GetFrameHeight());
             ImGui::Unindent(indent);
@@ -192,7 +197,7 @@ void mvStyleWindow::drawWidgets()
                 "Left-click on color square to open color picker,\n"
                 "Right-click to open edit options menu.");
 
-            ImGui::BeginChild("##colors", ImVec2(0, 0), ImGuiChildFlags_Border, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
+            ImGui::BeginChild("##colors", ImVec2(0, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar);
             ImGui::PushItemWidth(-300);
             for (int i = 0; i < ImGuiCol_COUNT; i++)
             {

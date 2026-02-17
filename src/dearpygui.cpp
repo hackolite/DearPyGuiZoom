@@ -359,8 +359,8 @@ GetModuleConstants()
 		ModuleConstants.push_back({ "mvPlotStyleVar_FillAlpha",          ImPlotStyleVar_FillAlpha });          // float,  alpha modifier applied to all plot item fills
 		ModuleConstants.push_back({ "mvPlotStyleVar_ErrorBarSize",       ImPlotStyleVar_ErrorBarSize });       // float,  error bar whisker width in pixels
 		ModuleConstants.push_back({ "mvPlotStyleVar_ErrorBarWeight",     ImPlotStyleVar_ErrorBarWeight });     // float,  error bar whisker weight in pixels
-		ModuleConstants.push_back({ "mvPlotStyleVar_DigitalBitHeight",   ImPlotStyleVar_DigitalBitHeight });   // float,  digital channels bit height (at 1) in pixels
-		ModuleConstants.push_back({ "mvPlotStyleVar_DigitalBitGap",      ImPlotStyleVar_DigitalBitGap });      // float,  digital channels bit padding gap in pixels
+		ModuleConstants.push_back({ "mvPlotStyleVar_DigitalPadding",     ImPlotStyleVar_DigitalPadding });     // float,  digital plot padding from bottom in pixels
+		ModuleConstants.push_back({ "mvPlotStyleVar_DigitalSpacing",     ImPlotStyleVar_DigitalSpacing });     // float,  digital plot spacing gap in pixels
 
 		// plot styling variables
 		ModuleConstants.push_back({ "mvPlotStyleVar_PlotBorderSize", ImPlotStyleVar_PlotBorderSize });         // float,  thickness of border around plot area

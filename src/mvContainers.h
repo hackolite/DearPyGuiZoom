@@ -88,7 +88,7 @@ enum class TabOrdering {
 
 struct mvChildWindowConfig
 {
-    ImGuiChildFlags  childFlags = ImGuiChildFlags_Border;
+    ImGuiChildFlags  childFlags = ImGuiChildFlags_Borders;
     bool             autosize_x = false;
     bool             autosize_y = false;
     ImGuiWindowFlags windowflags = ImGuiWindowFlags_NoSavedSettings|ImGuiWindowFlags_NavFlattened;
