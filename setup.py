@@ -143,7 +143,7 @@ class DPGBuildCommand(distutils.cmd.Command):
         parallel_jobs = get_parallel_jobs()
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
-        command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
+        command.append('cmake .. -DMVDIST_ONLY=True -DGLFW_BUILD_WAYLAND=OFF -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
         command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for Linux",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
@@ -154,7 +154,7 @@ class DPGBuildCommand(distutils.cmd.Command):
         parallel_jobs = get_parallel_jobs()
         command = ["mkdir cmake-build-local; "]
         command.append("cd cmake-build-local; ")
-        command.append('cmake .. -DMVDIST_ONLY=True -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
+        command.append('cmake .. -DMVDIST_ONLY=True -DGLFW_BUILD_WAYLAND=OFF -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
         command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
         self.announce('Running command: %s' % "Dear PyGui Build for OS X",level=distutils.log.INFO)
         subprocess.check_call(''.join(command), shell=True)
