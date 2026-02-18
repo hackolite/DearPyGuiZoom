@@ -141,7 +141,7 @@ class DPGBuildCommand(distutils.cmd.Command):
 
     elif get_platform() == "Linux":
         parallel_jobs = get_parallel_jobs()
-        command = ["mkdir cmake-build-local; "]
+        command = ["mkdir -p cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DGLFW_BUILD_WAYLAND=OFF -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
         command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
@@ -152,7 +152,7 @@ class DPGBuildCommand(distutils.cmd.Command):
     
     elif get_platform() == "OS X":
         parallel_jobs = get_parallel_jobs()
-        command = ["mkdir cmake-build-local; "]
+        command = ["mkdir -p cmake-build-local; "]
         command.append("cd cmake-build-local; ")
         command.append('cmake .. -DMVDIST_ONLY=True -DGLFW_BUILD_WAYLAND=OFF -DMVDPG_VERSION='+version_number()+ " -DMV_PY_VERSION="+ str(sys.version_info[0]) + "." + str(sys.version_info[1])+"; ")
         command.append(f"cd ..; cmake --build cmake-build-local --config Release -j{parallel_jobs}")
