@@ -404,14 +404,14 @@ GetModuleConstants()
 		ModuleConstants.push_back({ "mvNodesStyleVar_MiniMapPadding", ImNodesStyleVar_MiniMapPadding });
 		ModuleConstants.push_back({ "mvNodesStyleVar_MiniMapOffset", ImNodesStyleVar_MiniMapOffset });
 
-		#define X(el) ModuleConstants.push_back({ std::string(#el), (long)mvAppItemType::el });
+		#define X(el) ModuleConstants.push_back({ std::string(#el), static_cast<long>(mvAppItemType::el) });
 		MV_ITEM_TYPES
 		#undef X
 
 		int j = 0;
 		for (int i = MV_RESERVED_UUID_start; i < MV_RESERVED_UUID_start+MV_RESERVED_UUIDs; i++)
 		{
-			ModuleConstants.push_back({"mvReservedUUID_" + std::to_string(j), (long)i});
+			ModuleConstants.push_back({"mvReservedUUID_" + std::to_string(j), static_cast<long>(i)});
 			j++;
 		}
 
